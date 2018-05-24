@@ -1,16 +1,48 @@
-## Getting started
-* `npm i`
+# Simple Bit Wallet API Documentation
 
-## Todo
+## Table of contents
 
-create a basic server with express
-that will send back the index.html file on a GET request to '/'
-it should then send back jsonData on a GET to /data
+* [Install](#Install)
+* [Run](#Run)
+* [Test](#Test)
+* [Deploy](#Deploy)
+* [Structure of the API](#Structure-of-the-API)
+* [Deploying to prod](#Deploying-to-prod)
 
-## Fetch all branches locally
+# Follow the next steps to Install, Run, Test and Deploy the API.
 
+## Install
 ```
-git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
-git fetch --all
-git pull --all
+npm i
+```
+
+## Run
+```
+npm start
+```
+
+## Test
+```
+npm test
+```
+
+## Deploy
+```
+TODO
+```
+
+## Structure of the API
+
+    .
+    ├── api                     # Source/Modules/Features files
+    ├── config                  # Config files
+    ├── node_modules            # Libraries and dependencies (generated during the installation)
+    ├── utils                   # Tools and utilities
+    ├── index.js                # Main file
+    ├── LICENSE
+    └── README.md
+
+## Deploying to prod 
+```
+TODO
 ```
