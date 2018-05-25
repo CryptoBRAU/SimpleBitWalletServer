@@ -1,6 +1,6 @@
-let config = require('./config/config');
-let server = require('./api/server');
+let config = require('./server/config'); //Needs to be the first to load all configurations before everything.
+let app    = require('./server');
+let logger = require('./server/utils/logger');
 
-server.listen(config.port, () => {
-    console.log('Listening on port ', config.port);
-});
+app.listen(config.port);
+logger.info('Listening on', config.env, config.port);

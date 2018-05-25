@@ -34,13 +34,16 @@ TODO
 ## Structure of the API
 
     .
-    ├── api                     # Source/Modules/Features files
-    ├── config                  # Config files
-    ├── node_modules            # Libraries and dependencies (generated during the installation)
-    ├── utils                   # Tools and utilities
-    ├── index.js                # Main file
-    ├── LICENSE
-    └── README.md
+    ├── server                  # Server Source files
+        ├── api                 # API Modules/Routers/Features files
+        ├── config              # Config files
+        ├── middleware          # Middlewares of the application
+        ├── utils               # Tools and utilities
+        ├── server.js           # Server definition file of the application
+    ├── index.js                # Main file of the application
+    ├── package.json            # NPM configuration file
+    ├── LICENSE                 # MIT License file
+    └── README.md               # This file
 
 ## Deploying to prod 
 ```
