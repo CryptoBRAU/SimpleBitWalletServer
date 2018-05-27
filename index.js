@@ -1,5 +1,5 @@
 let config = require('./server/config'); //Needs to be the first to load all configurations before everything.
-let app    = require('./server');
+let app    = require('./server/server');
 let logger = require('./server/utils/logger');
 
 app.listen(config.port);
