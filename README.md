@@ -2,6 +2,7 @@
 
 ## Table of contents
 
+* [Dependencies](#Dependencies)
 * [Install](#Install)
 * [Run](#Run)
 * [Test](#Test)
@@ -10,6 +11,12 @@
 * [Deploying to prod](#Deploying-to-prod)
 
 # Follow the next steps to Install, Run, Test and Deploy the API.
+
+## Dependencies
+    
+* NodeJS
+* MongoDB
+* Docker (Optional)
 
 ## Install
 ```
