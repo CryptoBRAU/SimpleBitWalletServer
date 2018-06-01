@@ -1,9 +1,9 @@
 let morgan = require('morgan');
 let bodyParser = require('body-parser');
 
-module.exports = app => {
+module.exports = function(app) {
   app.use(morgan('combined', {
-    skip: (req, res) => {
+    skip: function(req, res) {
       return res.statusCode < 400
     }, stream: process.stderr
   }));

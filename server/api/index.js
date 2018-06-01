@@ -1,6 +1,6 @@
-let router = require('express').Router();
+let router      = require('express').Router();
+let userRoutes  = require('./user/userRoutes')
 
-// Declaration of all modules and features routers
-// router.use();
+router.use('/users', userRoutes);
 
 module.exports = router;
