@@ -4,8 +4,8 @@ let config        = require('../config');
 let checkToken    = expressJwt({ secret: config.secrets.jwt });
 let User          = require('../api/user/userModel');
 
-let decodeToken = function() {
-  return function(req, res, next) {
+let decodeToken = () => {
+  return (req, res, next) => {
     if (req.query && req.query.hasOwnProperty('access_token')) {
       req.headers.authorization = 'Bearer ' + req.query.access_token;
     }
@@ -13,7 +13,7 @@ let decodeToken = function() {
   }
 }
 
-let signToken = function(id) {
+let signToken = id => {
   return jwt.sign(
     { _id: id },
     config.secrets.jwt,
@@ -21,45 +21,46 @@ let signToken = function(id) {
   );
 }
 
-let getFreshUser = function() {
-  return function(req, res, next) {
+let getFreshUser = () => {
+  return (req, res, next) => {
     User.findById(req.user._id)
-      .then(function(user) {
+      .then(user => {
         if (!user) {
           res.status(400).send('Unauthorized');
         } else {
           req.user = user;
           next();
         }
-      }, function(err) {
+      })
+      .catch(err => {
         next(err);
       });
   }
 }
 
-let verifyUser = function() {
-  return function(req, res, next) {
+let verifyUser = () => {
+  return (req, res, next) => {
     let username = req.body.username;
     let password = req.body.password;
-
     if (!username || !password) {
       res.status(400).send('You need an username and password');
       return;
     }
 
     User.findOne({ username: username })
-      .then(function(user) {
+      .then(user => {
         if (!user) {
-          res.status(401).send('User not found');
+          res.status(401).send('Invalid username and/or password');
         } else {
           if (!user.authenticate(password)) {
-            res.status(401).send('Invalid password');
+            res.status(401).send('Invalid username and/or password');
           } else {
             req.user = user;
             next();
           }
         }
-      }, function(err) {
+      })
+      .catch(err => {
         next(err);
       });
   }

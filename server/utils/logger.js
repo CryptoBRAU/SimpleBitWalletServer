@@ -5,7 +5,7 @@ let logger = new winston.Logger({
   transports: [
     new winston.transports.Console({
       level: level,
-      timestamp: function () {
+      timestamp: () => {
         return (new Date()).toISOString();
       }
     })
