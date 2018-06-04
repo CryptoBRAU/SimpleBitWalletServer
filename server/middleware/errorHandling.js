@@ -9,6 +9,12 @@ let setError = (status, message) => {
   }
 }
 
+let verifyJWTErrors = (err) => {
+  if (err.name === 'UnauthorizedError') {
+    setError(401, 'Invalid token');
+  }
+}
+
 let verifyMongoDBErrors = (err) => {
   if (error == null && err && err.name && err.name === 'MongoError') {
     switch (err.code) {
@@ -37,6 +43,7 @@ let verifyAPIErrors = (err) => {
 module.exports = () => {
   return (err, req, res, next) => {
     error = null;
+    verifyJWTErrors(err);
     verifyMongoDBErrors(err);
     verifyAPIErrors(err);
     if(error) {

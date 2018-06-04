@@ -5,7 +5,7 @@ let signToken = require('../../auth/auth').signToken;
 
 let params = (req, res, next, id) => {
   User.findById(id)
-    .select('-password')
+    .select('-password -__v')
     .exec()
     .then(user => {
       if (!user) {
@@ -23,9 +23,13 @@ let params = (req, res, next, id) => {
     });
 }
 
+let me = (req, res) => {
+  res.json(req.user);
+};
+
 let get = (req, res, next) => {
   User.find({})
-    .select('-password')
+    .select('-password -__v')
     .exec()
     .then(users => {
       res.json(users);
@@ -45,6 +49,7 @@ let getOne = (req, res, next) => {
 let save = (user, res, next) => {
   user.save()
     .then(user => {
+      user = _.pick(user, ['_id', 'username']);
       let token = signToken(user._id);
       let auth = { token: token };
       res.json(_.merge(auth, user));
@@ -81,6 +86,7 @@ let deleteUser = (req, res, next) => {
 
 module.exports = {
   params: params,
+  me: me,
   get: get,
   getOne: getOne,
   put: put,

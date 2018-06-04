@@ -42,6 +42,7 @@ let verifyUser = () => {
   return (req, res, next) => {
     let username = req.body.username;
     let password = req.body.password;
+    console.log('verifyUser: ', username, password);
     if (!username || !password) {
       res.status(400).send('You need an username and password');
       return;
