@@ -5,6 +5,8 @@ let signToken = require('../../auth/auth').signToken;
 
 let params = (req, res, next, id) => {
   User.findById(id)
+    .select('-password')
+    .exec()
     .then(user => {
       if (!user) {
         next(appError.buildError(null, 403, 'Invalid id'));
@@ -23,6 +25,8 @@ let params = (req, res, next, id) => {
 
 let get = (req, res, next) => {
   User.find({})
+    .select('-password')
+    .exec()
     .then(users => {
       res.json(users);
     })
@@ -32,13 +36,18 @@ let get = (req, res, next) => {
 }
 
 let getOne = (req, res, next) => {
+  if (!req.user) {
+    next(appError.buildError(null, 404, 'User not found!'));
+  }
   res.json(req.user);
 }
 
-let save = (user, req, res, next) => {
+let save = (user, res, next) => {
   user.save()
     .then(user => {
-      res.json({ token: signToken(user._id) });
+      let token = signToken(user._id);
+      let auth = { token: token };
+      res.json(_.merge(auth, user));
     })
     .catch(err => {
       if (err && err.code === 11000) {
@@ -52,12 +61,12 @@ let put = (req, res, next) => {
   let user = req.user;
   let update = req.body;
   _.merge(user, update);
-  save(user, req, res, next);
+  save(user, res, next);
 }
 
 let post = (req, res, next) => {
   let newUser = new User(req.body);
-  save(newUser, req, res, next);
+  save(newUser, res, next);
 }
 
 let deleteUser = (req, res, next) => {

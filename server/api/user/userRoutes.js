@@ -1,11 +1,10 @@
 let router          = require('express').Router();
-let logger          = require('../../utils/logger');
 let userController  = require('./userController');
 let auth            = require('../../auth/auth');
 let checkUser       = [auth.decodeToken(), auth.getFreshUser()];
 
 router.param('id', userController.params);
-// router.get('/me', checkUser, userController.me);
+router.get('/me', checkUser, userController.me);
 
 router.route('/')
   .get(userController.get)
