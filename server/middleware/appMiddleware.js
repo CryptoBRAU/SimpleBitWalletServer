@@ -1,5 +1,7 @@
-let morgan = require('morgan');
-let bodyParser = require('body-parser');
+let morgan      = require('morgan');
+let bodyParser  = require('body-parser');
+let cors        = require('cors');
+let override    = require('method-override');
 
 module.exports = (app) => {
   app.use(morgan('combined', {
@@ -14,4 +16,6 @@ module.exports = (app) => {
   }));
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
+  app.use(cors());
+  app.use(override());
 };
