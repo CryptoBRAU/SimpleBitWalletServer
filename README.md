@@ -43,6 +43,7 @@ TODO
     .
     ├── server                  # Server Source files
         ├── api                 # API Modules/Routers/Features files
+        ├── auth                # Authentication files
         ├── config              # Config files
         ├── middleware          # Middlewares of the application
         ├── utils               # Tools and utilities
