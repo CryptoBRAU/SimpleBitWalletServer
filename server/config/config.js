@@ -7,7 +7,7 @@ const config = {
   prod: 'production',
   port: process.env.PORT || 3000,
   // 10 days in minutes
-  expireTime: 24 * 60 * 10,
+  expireTime: process.env.EXPIRE_TIME || 24 * 60 * 10,
   secrets: {
     jwt: process.env.JWT,
   },

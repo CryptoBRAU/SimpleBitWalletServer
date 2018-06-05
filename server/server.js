@@ -1,6 +1,6 @@
 const express = require('express');
 const api = require('./api');
-const config = require('./config');
+const config = require('./config/config');
 const auth = require('./auth/authRoutes');
 const errorHandling = require('./middleware/errorHandling');
 const mongoose = require('mongoose');

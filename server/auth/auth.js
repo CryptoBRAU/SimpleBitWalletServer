@@ -1,7 +1,7 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
 const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
-const config = require('../config');
+const config = require('../config/config');
 const User = require('../api/user/userModel');
 
 const checkToken = expressJwt({ secret: config.secrets.jwt });

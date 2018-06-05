@@ -1,4 +1,4 @@
-const config = require('../config');
+const config = require('../config/config');
 const winston = require('winston');
 
 const level = config.logLevel;
