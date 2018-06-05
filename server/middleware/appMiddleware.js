@@ -5,17 +5,11 @@ const override = require('method-override');
 
 module.exports = (app) => {
   app.use(morgan('combined', {
-    skip: (req, res) => {
-      const status = res.statusCode < 400;
-      return status;
-    },
+    skip: (req, res) => res.statusCode < 400,
     stream: process.stderr,
   }));
   app.use(morgan('combined', {
-    skip: (req, res) => {
-      const status = res.statusCode >= 400;
-      return status;
-    },
+    skip: (req, res) => res.statusCode >= 400,
     stream: process.stdout,
   }));
   app.use(bodyParser.urlencoded({ extended: true }));

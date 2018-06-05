@@ -40,17 +40,14 @@ const verifyAPIErrors = (err) => {
   }
 };
 
-module.exports = () => {
-  const errorHandling = (err, req, res, next) => {
-    error = null;
-    verifyJWTErrors(err);
-    verifyMongoDBErrors(err);
-    verifyAPIErrors(err);
-    if (error) {
-      res.status(error.status).send(error.message);
-    } else {
-      next();
-    }
-  };
-  return errorHandling;
+module.exports = () => (err, req, res, next) => {
+  error = null;
+  verifyJWTErrors(err);
+  verifyMongoDBErrors(err);
+  verifyAPIErrors(err);
+  if (error) {
+    res.status(error.status).send(error.message);
+  } else {
+    next();
+  }
 };
