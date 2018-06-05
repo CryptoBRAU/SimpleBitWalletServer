@@ -1,7 +1,8 @@
 let _ = require('lodash');
 let config = {
   dev: 'development',
-  test: 'staging',
+  test: 'testing',
+  stage: 'staging',
   prod: 'production',
   port: process.env.PORT || 3000,
   // 10 days in minutes

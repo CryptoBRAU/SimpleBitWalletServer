@@ -2,6 +2,9 @@ module.exports = {
   logging: false,
   logLevel: 'error',
   db: {
-    url: 'mongodb://localhost/sbw'
+    url: process.env.MONGODB_URI
+  },
+  secrets: {
+    jwt: process.env.JWT
   }
 };
