@@ -11,7 +11,7 @@ const buildError = (err, status, message) => {
   if (message) {
     error.message = message;
   }
-  return err;
+  return error;
 };
 
 module.exports = {

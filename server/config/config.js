@@ -25,11 +25,10 @@ const init = () => {
   let envConfig;
   try {
     envConfig = require(`./${config.env}`);
-    envConfig = envConfig || {};
   } catch (e) {
     envConfig = {};
   }
-  config = _.assign(config, envConfig || {});
+  config = _.assign(config, envConfig);
 };
 
 init();
