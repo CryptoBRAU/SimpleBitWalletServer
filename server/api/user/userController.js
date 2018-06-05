@@ -1,13 +1,14 @@
-let User      = require('./userModel');
-let _         = require('lodash');
-let appError  = require('../../utils/error');
-let signToken = require('../../auth/auth').signToken;
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+const User = require('./userModel');
+const _ = require('lodash');
+const appError = require('../../utils/error');
+const { signToken } = require('../../auth/auth');
 
-let params = (req, res, next, id) => {
+const params = (req, res, next, id) => {
   User.findById(id)
     .select('-password -__v')
     .exec()
-    .then(user => {
+    .then((user) => {
       if (!user) {
         next(appError.buildError(null, 403, 'Invalid id'));
       } else {
@@ -15,81 +16,82 @@ let params = (req, res, next, id) => {
         next();
       }
     })
-    .catch(err => {
+    .catch((err) => {
+      let error = err;
       if (err.name === 'CastError') {
-        err = appError.buildError(err, 403, 'Invalid id');
+        error = appError.buildError(err, 403, 'Invalid id');
       }
-      next(err);
+      next(error);
     });
-}
+};
 
-let me = (req, res) => {
+const me = (req, res) => {
   res.json(req.user);
 };
 
-let get = (req, res, next) => {
+const get = (req, res, next) => {
   User.find({})
     .select('-password -__v')
     .exec()
-    .then(users => {
+    .then((users) => {
       res.json(users);
     })
-    .catch(err => {
+    .catch((err) => {
       next(err);
     });
-}
+};
 
-let getOne = (req, res, next) => {
+const getOne = (req, res, next) => {
   if (!req.user) {
     next(appError.buildError(null, 404, 'User not found!'));
   }
   res.json(req.user);
-}
+};
 
-let save = (user, res, next) => {
+const save = (user, res, next) => {
   user.save()
-    .then(user => {
-      user = _.pick(user, ['_id', 'username']);
-      let token = signToken(user._id);
-      let auth = { token: token };
+    .then((savedUser) => {
+      const sUser = _.pick(savedUser, ['_id', 'username']);
+      const token = signToken(sUser._id);
+      const auth = { token };
       res.json(_.merge(auth, user));
     })
-    .catch(err => {
-      if (err && err.code === 11000) {
-        err.message = 'Username already exists.';
+    .catch((err) => {
+      const error = err;
+      if (error && error.code === 11000) {
+        error.message = 'Username already exists.';
       }
-      next(err);
+      next(error);
     });
-}
+};
 
-let put = (req, res, next) => {
-  let user = req.user;
-  let update = req.body;
+const put = (req, res, next) => {
+  const { user } = req;
+  const update = req.body;
   _.merge(user, update);
   save(user, res, next);
-}
+};
 
-let post = (req, res, next) => {
-  let newUser = new User(req.body);
-  save(newUser, res, next);
-}
+const post = (req, res, next) => {
+  save(new User(req.body), res, next);
+};
 
-let deleteUser = (req, res, next) => {
+const deleteUser = (req, res, next) => {
   req.user.remove()
-    .then(removedUser => {
+    .then((removedUser) => {
       res.json(removedUser);
     })
-    .catch(err => {
+    .catch((err) => {
       next(err);
     });
-}
+};
 
 module.exports = {
-  params: params,
-  me: me,
-  get: get,
-  getOne: getOne,
-  put: put,
-  post: post,
-  delete: deleteUser
-}
+  params,
+  me,
+  get,
+  getOne,
+  put,
+  post,
+  delete: deleteUser,
+};

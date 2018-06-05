@@ -1,12 +1,13 @@
-let express       = require('express');
-let app           = express();
-let api           = require('./api');
-var config        = require('./config');
-let auth          = require('./auth/authRoutes');
-let errorHandling = require('./middleware/errorHandling');
-let mongoose      = require('mongoose');
+const express = require('express');
+const api = require('./api');
+const config = require('./config');
+const auth = require('./auth/authRoutes');
+const errorHandling = require('./middleware/errorHandling');
+const mongoose = require('mongoose');
 
-//Start the connection with the DB
+const app = express();
+
+// Start the connection with the DB
 mongoose.connect(config.db.url);
 
 // Setup the app middleware

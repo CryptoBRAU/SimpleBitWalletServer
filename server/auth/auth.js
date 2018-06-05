@@ -1,30 +1,34 @@
-let jwt           = require('jsonwebtoken');
-let expressJwt    = require('express-jwt');
-let config        = require('../config');
-let checkToken    = expressJwt({ secret: config.secrets.jwt });
-let User          = require('../api/user/userModel');
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
+const config = require('../config');
+const User = require('../api/user/userModel');
 
-let decodeToken = () => {
-  return (req, res, next) => {
-    if (req.query && req.query.hasOwnProperty('access_token')) {
-      req.headers.authorization = 'Bearer ' + req.query.access_token;
+const checkToken = expressJwt({ secret: config.secrets.jwt });
+
+const decodeToken = () => {
+  const decode = (req, res, next) => {
+    if (req.query && Object.prototype.hasOwnProperty.call(req.query, 'access_token')) {
+      req.headers.authorization = `Bearer ${req.query.access_token}`;
     }
     checkToken(req, res, next);
-  }
-}
+  };
+  return decode;
+};
 
-let signToken = id => {
-  return jwt.sign(
+const signToken = (id) => {
+  const sign = jwt.sign(
     { _id: id },
     config.secrets.jwt,
-    { expiresIn: config.expireTime }
+    { expiresIn: config.expireTime },
   );
-}
+  return sign;
+};
 
-let getFreshUser = () => {
-  return (req, res, next) => {
+const getFreshUser = () => {
+  const freshUser = (req, res, next) => {
     User.findById(req.user._id)
-      .then(user => {
+      .then((user) => {
         if (!user) {
           res.status(400).send('Unauthorized');
         } else {
@@ -32,44 +36,41 @@ let getFreshUser = () => {
           next();
         }
       })
-      .catch(err => {
+      .catch((err) => {
         next(err);
       });
-  }
-}
+  };
+  return freshUser;
+};
 
-let verifyUser = () => {
-  return (req, res, next) => {
-    let username = req.body.username;
-    let password = req.body.password;
-    console.log('verifyUser: ', username, password);
+const verifyUser = () => {
+  const verify = (req, res, next) => {
+    const { username, password } = req.body;
+
     if (!username || !password) {
       res.status(400).send('You need an username and password');
       return;
     }
 
-    User.findOne({ username: username })
-      .then(user => {
-        if (!user) {
+    User.findOne({ username })
+      .then((user) => {
+        if (!user || !user.authenticate(password)) {
           res.status(401).send('Invalid username and/or password');
         } else {
-          if (!user.authenticate(password)) {
-            res.status(401).send('Invalid username and/or password');
-          } else {
-            req.user = user;
-            next();
-          }
+          req.user = user;
+          next();
         }
       })
-      .catch(err => {
+      .catch((err) => {
         next(err);
       });
-  }
-}
+  };
+  return verify;
+};
 
 module.exports = {
-  decodeToken: decodeToken,
-  signToken: signToken,
-  getFreshUser: getFreshUser,
-  verifyUser: verifyUser
+  decodeToken,
+  signToken,
+  getFreshUser,
+  verifyUser,
 };

@@ -4,7 +4,9 @@
   "description": "API to support the Simple Bit Wallet App",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint server/**",
+    "test": "jest server",
+    "coverage": "jest --collectCoverageFrom=server/**.js --coverage server",
     "start": "nodemon"
   },
   "author": "Marcel Silva",

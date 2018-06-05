@@ -1,17 +1,19 @@
 const SBWErrorName = 'SBWError';
-let buildError = (err, status, message) => {
-  if (!err) {
-    err = new Error('Unknow error');
+const buildError = (err, status, message) => {
+  let error = err;
+  if (!error) {
+    error = new Error('Unknow error');
   }
-  err.name = SBWErrorName;
+  error.name = SBWErrorName;
   if (status) {
-    err.status = status;
+    error.status = status;
   }
   if (message) {
-    err.message = message;
+    error.message = message;
   }
   return err;
 };
+
 module.exports = {
-  buildError: buildError
+  buildError,
 };
