@@ -10,7 +10,7 @@ const setError = (status, message) => {
 };
 
 const verifyJWTErrors = (err) => {
-  if (err.name === 'UnauthorizedError') {
+  if (err && err.name === 'UnauthorizedError') {
     setError(401, 'Invalid token');
   }
 };
@@ -40,7 +40,7 @@ const verifyAPIErrors = (err) => {
   }
 };
 
-module.exports = () => (err, req, res, next) => {
+module.exports = (err, req, res, next) => {
   error = null;
   verifyJWTErrors(err);
   verifyMongoDBErrors(err);
