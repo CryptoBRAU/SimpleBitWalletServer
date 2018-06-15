@@ -1,17 +1,19 @@
-let morgan = require('morgan');
-let bodyParser = require('body-parser');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const override = require('method-override');
 
-module.exports = app => {
+module.exports = (app) => {
   app.use(morgan('combined', {
-    skip: (req, res) => {
-      return res.statusCode < 400
-    }, stream: process.stderr
+    skip: (req, res) => res.statusCode < 400,
+    stream: process.stderr,
   }));
   app.use(morgan('combined', {
-    skip: function (req, res) {
-      return res.statusCode >= 400
-    }, stream: process.stdout
+    skip: (req, res) => res.statusCode >= 400,
+    stream: process.stdout,
   }));
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
+  app.use(cors());
+  app.use(override());
 };

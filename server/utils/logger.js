@@ -1,15 +1,17 @@
-let config = require('../config');
-let winston = require("winston");
-let level = config.logLevel;
-let logger = new winston.Logger({
+const config = require('../config/config');
+const winston = require('winston');
+
+const level = config.logLevel;
+const logger = new winston.Logger({
   transports: [
     new winston.transports.Console({
-      level: level,
-      timestamp: function () {
-        return (new Date()).toISOString();
-      }
-    })
-  ]
+      level,
+      timestamp: () => {
+        const dateAsISOString = (new Date()).toISOString();
+        return dateAsISOString;
+      },
+    }),
+  ],
 });
 
 module.exports = logger;
