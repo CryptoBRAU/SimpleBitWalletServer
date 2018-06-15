@@ -1,8 +1,8 @@
 module.exports = {
   logging: true,
-  logLevel: 'verbose',
+  logLevel: 'error',
   db: {
-    url: process.env.MONGODB_URI || 'mongodb://localhost/sbw',
+    url: process.env.MONGODB_URI || 'mongodb://localhost/sbwtest',
   },
   secrets: {
     jwt: process.env.JWT || 'testingJWTSecret',

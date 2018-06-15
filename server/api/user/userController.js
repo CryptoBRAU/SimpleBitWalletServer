@@ -54,7 +54,7 @@ const save = (user, res, next) => {
       const sUser = _.pick(savedUser, ['_id', 'username']);
       const token = signToken(sUser._id);
       const auth = { token };
-      res.json(_.merge(auth, user));
+      res.json(_.assign(sUser, auth));
     })
     .catch((err) => {
       const error = err;
