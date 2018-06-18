@@ -2,13 +2,13 @@
 
 ## Table of contents
 
-* [Dependencies](#Dependencies)
-* [Install](#Install)
-* [Run](#Run)
-* [Test](#Test)
-* [Deploy](#Deploy)
-* [Structure of the API](#Structure-of-the-API)
-* [Deploying to prod](#Deploying-to-prod)
+* [Dependencies](#dependencies)
+* [Install](#install)
+* [Run](#run)
+* [Test](#test)
+* [Deploy](#deploy)
+* [Structure of the API](#structure-of-the-api)
+* [Deploying to prod](#deploying-to-prod)
 
 # Follow the next steps to Install, Run, Test and Deploy the API.
 
