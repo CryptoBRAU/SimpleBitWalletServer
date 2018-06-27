@@ -15,7 +15,7 @@ describe('Authentication API', () => {
 
   it('Should signin', async (done) => {
     const user = {
-      username: 'username_001',
+      username: 'username_auth_001',
       password: 'pass',
     };
     const createdUser = await userUtil.createUser(app, user);
@@ -36,7 +36,7 @@ describe('Authentication API', () => {
 
   it('Should not signin and receive invalid username and/or password', async (done) => {
     const user = {
-      username: 'username_002',
+      username: 'username_auth_002',
       password: 'pass',
     };
     await userUtil.createUser(app, user);
@@ -55,7 +55,7 @@ describe('Authentication API', () => {
 
   it('Should not signin and receive you need an username and password', (done) => {
     const user = {
-      username: 'username_003',
+      username: 'username_auth_003',
       password: null,
     };
     request(app)

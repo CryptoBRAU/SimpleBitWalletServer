@@ -74,7 +74,7 @@ describe('User API', () => {
       password: 'pass',
     };
     const createdUser = await userUtil.createUser(app, user);
-    const updatedUsername = 'testUsername004a';
+    const updatedUsername = 'testUsername005updated';
     request(app)
       .put(`/api/users/${createdUser._id}`)
       .send({ username: updatedUsername })
