@@ -6,7 +6,7 @@ const setup = require('../../../tests/setup');
 
 describe('User API', () => {
   beforeAll(() => {
-    setup.init('user');
+    setup.init();
   });
 
   afterAll((done) => {
@@ -74,7 +74,7 @@ describe('User API', () => {
       password: 'pass',
     };
     const createdUser = await userUtil.createUser(app, user);
-    const updatedUsername = 'testUsername1004';
+    const updatedUsername = 'testUsername004a';
     request(app)
       .put(`/api/users/${createdUser._id}`)
       .send({ username: updatedUsername })

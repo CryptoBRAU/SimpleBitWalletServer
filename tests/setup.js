@@ -2,10 +2,9 @@ const config = require('../server/config/config');
 const logger = require('../server/utils/logger');
 const dbTest = require('../server/utils/db');
 
-const initConfig = (dbName) => {
+const initConfig = () => {
   logger.info('Initializing config files for test...');
   process.env.NODE_ENV = 'test';
-  process.env.MONGODB_URI = `test_${dbName}`;
   config.init();
   dbTest.mongoose.set('bufferCommands', false);
   logger.info('Config files for test initialized.');
@@ -23,8 +22,8 @@ const cleanDB = async () => {
   logger.info('DB cleaned');
 };
 
-const init = async (dbName) => {
-  initConfig(dbName);
+const init = async () => {
+  initConfig();
   await startDB();
   await cleanDB();
   return null;

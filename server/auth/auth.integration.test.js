@@ -6,7 +6,7 @@ const setup = require('../../tests/setup');
 
 describe('Authentication API', () => {
   beforeAll(() => {
-    setup.init('auth');
+    setup.init();
   });
 
   afterAll((done) => {
