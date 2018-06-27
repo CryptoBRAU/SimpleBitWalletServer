@@ -2,12 +2,20 @@
 const request = require('supertest');
 const app = require('../server');
 const userUtil = require('../../tests/utils/util.user.integration');
-require('../../tests/setup');
+const setup = require('../../tests/setup');
 
 describe('Authentication API', () => {
+  beforeAll(() => {
+    setup.init('auth');
+  });
+
+  afterAll((done) => {
+    setup.close(done);
+  });
+
   it('Should signin', async (done) => {
     const user = {
-      username: 'testUsername',
+      username: 'username_001',
       password: 'pass',
     };
     const createdUser = await userUtil.createUser(app, user);
@@ -21,16 +29,18 @@ describe('Authentication API', () => {
         expect(loggedUser).toBeDefined();
         expect(loggedUser._id).toEqual(createdUser._id);
         expect(loggedUser.username).toEqual(createdUser.username);
-        expect(loggedUser.token).toEqual(createdUser.token);
+        expect(loggedUser.token).toBeDefined();
         done();
       });
   });
 
-  it('Should not signin and receive invalid username and/or password', (done) => {
+  it('Should not signin and receive invalid username and/or password', async (done) => {
     const user = {
-      username: 'testUsername',
-      password: 'wrongPass',
+      username: 'username_002',
+      password: 'pass',
     };
+    await userUtil.createUser(app, user);
+    user.password = 'wrongPass';
     request(app)
       .post('/auth/signin')
       .send(user)
@@ -45,7 +55,8 @@ describe('Authentication API', () => {
 
   it('Should not signin and receive you need an username and password', (done) => {
     const user = {
-      username: 'testUsername1000',
+      username: 'username_003',
+      password: null,
     };
     request(app)
       .post('/auth/signin')

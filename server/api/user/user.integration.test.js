@@ -2,28 +2,38 @@
 const request = require('supertest');
 const app = require('../../server');
 const userUtil = require('../../../tests/utils/util.user.integration');
-require('../../../tests/setup');
-
-let createdUser;
-const user = {
-  username: 'testUsername',
-  password: 'pass',
-};
+const setup = require('../../../tests/setup');
 
 describe('User API', () => {
+  beforeAll(() => {
+    setup.init('user');
+  });
+
+  afterAll((done) => {
+    setup.close(done);
+  });
+
   it('Should create an user', async () => {
-    createdUser = await userUtil.createUser(app, user);
+    const user = {
+      username: 'username_001',
+      password: 'pass',
+    };
+    const createdUser = await userUtil.createUser(app, user);
     expect(createdUser.username).toEqual(user.username);
     expect(createdUser.password).toBeUndefined();
     expect(createdUser.token).toBeDefined();
   });
 
   it('Should find all users', async (done) => {
-    const user2 = {
-      username: 'testUsername2',
+    const user = {
+      username: 'username_002',
       password: 'pass',
     };
-    createdUser = await userUtil.createUser(app, user);
+    const user2 = {
+      username: 'username_003',
+      password: 'pass',
+    };
+    const createdUser = await userUtil.createUser(app, user);
     const createdUser2 = await userUtil.createUser(app, user2);
     request(app)
       .get('/api/users')
@@ -32,7 +42,7 @@ describe('User API', () => {
       .then((response) => {
         const users = response.body;
         expect(users).toBeDefined();
-        expect(users).toHaveLength(2);
+        expect(users.length).toBeGreaterThanOrEqual(2);
         expect(createdUser.username).toEqual(user.username);
         expect(createdUser2.username).toEqual(user2.username);
         done();
@@ -40,7 +50,11 @@ describe('User API', () => {
   });
 
   it('Should find an user', async (done) => {
-    createdUser = await userUtil.createUser(app, user);
+    const user = {
+      username: 'username_004',
+      password: 'pass',
+    };
+    const createdUser = await userUtil.createUser(app, user);
     request(app)
       .get(`/api/users/${createdUser._id}`)
       .set('Accept', 'application/json')
@@ -55,7 +69,11 @@ describe('User API', () => {
   });
 
   it('Should update an user', async (done) => {
-    createdUser = await userUtil.createUser(app, user);
+    const user = {
+      username: 'username_005',
+      password: 'pass',
+    };
+    const createdUser = await userUtil.createUser(app, user);
     const updatedUsername = 'testUsername1004';
     request(app)
       .put(`/api/users/${createdUser._id}`)
@@ -73,7 +91,11 @@ describe('User API', () => {
   });
 
   it('Should find me', async (done) => {
-    createdUser = await userUtil.createUser(app, user);
+    const user = {
+      username: 'username_006',
+      password: 'pass',
+    };
+    const createdUser = await userUtil.createUser(app, user);
     request(app)
       .get('/api/users/me')
       .set('Accept', 'application/json')
@@ -89,10 +111,16 @@ describe('User API', () => {
   });
 
   it('Should get an error when try to create the user more than once', async () => {
-    const newUser = {
-      username: 'testUsername',
+    const user = {
+      username: 'username_007',
       password: 'pass',
     };
+    const newUser = {
+      username: 'username_007',
+      password: 'pass',
+    };
+    newUser.username = user.username;
+    await userUtil.createUser(app, user);
     request(app)
       .post('/api/users')
       .send(newUser)
