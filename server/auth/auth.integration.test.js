@@ -5,8 +5,8 @@ const userUtil = require('../../tests/utils/util.user.integration');
 const setup = require('../../tests/setup');
 
 describe('Authentication API', () => {
-  beforeAll(() => {
-    setup.init();
+  beforeAll(async () => {
+    await setup.init();
   });
 
   afterAll((done) => {
@@ -19,7 +19,7 @@ describe('Authentication API', () => {
       password: 'pass',
     };
     const createdUser = await userUtil.createUser(app, user);
-    request(app)
+    await request(app)
       .post('/auth/signin')
       .send(user)
       .set('Accept', 'application/json')
@@ -41,7 +41,7 @@ describe('Authentication API', () => {
     };
     await userUtil.createUser(app, user);
     user.password = 'wrongPass';
-    request(app)
+    await request(app)
       .post('/auth/signin')
       .send(user)
       .set('Accept', 'application/json')
@@ -53,12 +53,12 @@ describe('Authentication API', () => {
       });
   });
 
-  it('Should not signin and receive you need an username and password', (done) => {
+  it('Should not signin and receive you need an username and password', async (done) => {
     const user = {
       username: 'username_auth_003',
       password: null,
     };
-    request(app)
+    await request(app)
       .post('/auth/signin')
       .send(user)
       .set('Accept', 'application/json')
@@ -66,6 +66,44 @@ describe('Authentication API', () => {
       .then((response) => {
         expect(response.error).toBeDefined();
         expect(response.error.text).toEqual('You need an username and password');
+        done();
+      });
+  });
+
+  it('Should always validate the token', async (done) => {
+    const user = {
+      username: 'username_auth_004',
+      password: 'pass',
+    };
+    const createdUser = await userUtil.createUser(app, user);
+    await request(app)
+      .get('/api/users/me')
+      .set('Accept', 'application/json')
+      .query({ access_token: createdUser.token })
+      .expect(200)
+      .then((response) => {
+        const me = response.body;
+        expect(me).toBeDefined();
+        expect(me._id).toEqual(createdUser._id);
+        expect(me.username).toEqual(createdUser.username);
+        done();
+      });
+  });
+
+  it('Should return Unauthorized when try to access with a deleted user', async (done) => {
+    const user = {
+      username: 'username_auth_005',
+      password: 'pass',
+    };
+    const createdUser = await userUtil.createUser(app, user);
+    await userUtil.deleteUser(app, createdUser);
+    await request(app)
+      .get(`/api/users/${createdUser._id}`)
+      .set('Accept', 'application/json')
+      .query({ access_token: createdUser.token })
+      .expect(403)
+      .then((response) => {
+        expect(response.text).toEqual('Invalid id');
         done();
       });
   });

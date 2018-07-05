@@ -26,7 +26,6 @@ const init = async () => {
   initConfig();
   await startDB();
   await cleanDB();
-  return null;
 };
 
 const close = async (done) => {

@@ -5,8 +5,8 @@ const userUtil = require('../../../tests/utils/util.user.integration');
 const setup = require('../../../tests/setup');
 
 describe('User API', () => {
-  beforeAll(() => {
-    setup.init();
+  beforeAll(async () => {
+    await setup.init();
   });
 
   afterAll((done) => {
@@ -35,7 +35,7 @@ describe('User API', () => {
     };
     const createdUser = await userUtil.createUser(app, user);
     const createdUser2 = await userUtil.createUser(app, user2);
-    request(app)
+    await request(app)
       .get('/api/users')
       .set('Accept', 'application/json')
       .expect(200)
@@ -55,7 +55,7 @@ describe('User API', () => {
       password: 'pass',
     };
     const createdUser = await userUtil.createUser(app, user);
-    request(app)
+    await request(app)
       .get(`/api/users/${createdUser._id}`)
       .set('Accept', 'application/json')
       .expect(200)
@@ -75,7 +75,7 @@ describe('User API', () => {
     };
     const createdUser = await userUtil.createUser(app, user);
     const updatedUsername = 'testUsername005updated';
-    request(app)
+    await request(app)
       .put(`/api/users/${createdUser._id}`)
       .send({ username: updatedUsername })
       .set('Accept', 'application/json')
@@ -96,7 +96,7 @@ describe('User API', () => {
       password: 'pass',
     };
     const createdUser = await userUtil.createUser(app, user);
-    request(app)
+    await request(app)
       .get('/api/users/me')
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${createdUser.token}`)
@@ -110,7 +110,7 @@ describe('User API', () => {
       });
   });
 
-  it('Should get an error when try to create the user more than once', async () => {
+  it('Should get an error when try to create the same user more than once', async (done) => {
     const user = {
       username: 'username_007',
       password: 'pass',
@@ -119,12 +119,17 @@ describe('User API', () => {
       username: 'username_007',
       password: 'pass',
     };
-    newUser.username = user.username;
     await userUtil.createUser(app, user);
-    request(app)
+    await request(app)
       .post('/api/users')
       .send(newUser)
       .set('Accept', 'application/json')
-      .expect(403);
+      .expect(403)
+      .then((response) => {
+        expect(response.error).toBeDefined();
+        expect(response.text).toBeDefined();
+        expect(response.text).toEqual('Username already exists.');
+        done();
+      });
   });
 });
