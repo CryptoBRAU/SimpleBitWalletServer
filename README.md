@@ -51,7 +51,7 @@ npm run lint
 
 ## Deploy
 ```
-TODO
+It automatically deploy the code to Staging when it is committed in the Master branch.
 ```
 
 ## Structure of the API
@@ -74,5 +74,5 @@ TODO
 
 ## Deploying to prod 
 ```
-TODO
+Right now this happens manually in the Heroku pipeline. (https://dashboard.heroku.com/pipelines/03450c39-130b-4b97-97dc-8fc68ef3f800)
 ```
