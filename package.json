@@ -12,9 +12,9 @@
   },
   "scripts": {
     "lint": "eslint server/**",
-    "test": "jest --forceExit server",
-    "test:auto": "jest --watch --forceExit server",
-    "coverage": "jest --collectCoverageFrom=server/**.js --collectCoverageFrom=!server/utils/logger.js --coverage --forceExit server",
+    "test": "jest --forceExit --runInBand server",
+    "test:auto": "jest --watch --runInBand --forceExit server",
+    "coverage": "jest --collectCoverageFrom=server/**.js --collectCoverageFrom=!server/utils/logger.js --coverage --runInBand --forceExit server",
     "start": "node index.js",
     "start:dev": "nodemon"
   },

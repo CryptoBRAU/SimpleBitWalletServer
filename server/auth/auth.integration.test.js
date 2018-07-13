@@ -90,7 +90,7 @@ describe('Authentication API', () => {
       });
   });
 
-  it('Should return Unauthorized when try to access with a deleted user', async (done) => {
+  it('Should return Invalid id when try to access with a deleted user', async (done) => {
     const user = {
       username: 'username_auth_005',
       password: 'pass',
