@@ -25,8 +25,8 @@ const params = async (req, res, next, id) => {
     });
 };
 
-const me = (req, res) => {
-  res.json(req.user);
+const me = async (req, res) => {
+  await res.json(req.user);
 };
 
 const get = async (req, res, next) => {
@@ -41,11 +41,11 @@ const get = async (req, res, next) => {
     });
 };
 
-const getOne = (req, res, next) => {
+const getOne = async (req, res, next) => {
   if (!req.user) {
-    next(appError.buildError(null, 404, 'User not found!'));
+    await next(appError.buildError(null, 404, 'User not found!'));
   } else {
-    res.json(req.user);
+    await res.json(req.user);
   }
 };
 
