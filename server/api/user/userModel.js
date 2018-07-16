@@ -28,9 +28,6 @@ UserSchema.methods = {
     return bcrypt.compareSync(plainTextPassword, this.password);
   },
   encryptPassword: function encrypt(plainTextPassword) {
-    if (!plainTextPassword) {
-      return '';
-    }
     const salt = bcrypt.genSaltSync(10);
     return bcrypt.hashSync(plainTextPassword, salt);
   },

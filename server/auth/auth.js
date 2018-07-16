@@ -18,7 +18,7 @@ const decodeToken = () => {
 
 const signToken = id => jwt.sign({ _id: id }, config.secrets.jwt, { expiresIn: config.expireTime });
 
-const getFreshUser = () => (req, res, next) => {
+const getFreshUser = () => (req, res, next) =>
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
@@ -31,17 +31,16 @@ const getFreshUser = () => (req, res, next) => {
     .catch((err) => {
       next(err);
     });
-};
 
 const verifyUser = () => (req, res, next) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
     res.status(400).send('You need an username and password');
-    return;
+    return null;
   }
 
-  User.findOne({ username })
+  const value = User.findOne({ username })
     .then((user) => {
       if (!user || !user.authenticate(password)) {
         res.status(401).send('Invalid username and/or password');
@@ -53,6 +52,7 @@ const verifyUser = () => (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+  return value;
 };
 
 module.exports = {

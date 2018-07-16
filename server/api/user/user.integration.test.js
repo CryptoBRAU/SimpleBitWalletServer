@@ -18,7 +18,7 @@ describe('User API', () => {
       username: 'username_001',
       password: 'pass',
     };
-    const createdUser = await userUtil.createUser(app, user);
+    const createdUser = await userUtil.createUser(request(app), user);
     expect(createdUser.username).toEqual(user.username);
     expect(createdUser.password).toBeUndefined();
     expect(createdUser.token).toBeDefined();
@@ -33,8 +33,8 @@ describe('User API', () => {
       username: 'username_003',
       password: 'pass',
     };
-    const createdUser = await userUtil.createUser(app, user);
-    const createdUser2 = await userUtil.createUser(app, user2);
+    const createdUser = await userUtil.createUser(request(app), user);
+    const createdUser2 = await userUtil.createUser(request(app), user2);
     await request(app)
       .get('/api/users')
       .set('Accept', 'application/json')
@@ -54,7 +54,7 @@ describe('User API', () => {
       username: 'username_004',
       password: 'pass',
     };
-    const createdUser = await userUtil.createUser(app, user);
+    const createdUser = await userUtil.createUser(request(app), user);
     await request(app)
       .get(`/api/users/${createdUser._id}`)
       .set('Accept', 'application/json')
@@ -73,7 +73,7 @@ describe('User API', () => {
       username: 'username_005',
       password: 'pass',
     };
-    const createdUser = await userUtil.createUser(app, user);
+    const createdUser = await userUtil.createUser(request(app), user);
     const updatedUsername = 'testUsername005updated';
     await request(app)
       .put(`/api/users/${createdUser._id}`)
@@ -95,7 +95,7 @@ describe('User API', () => {
       username: 'username_006',
       password: 'pass',
     };
-    const createdUser = await userUtil.createUser(app, user);
+    const createdUser = await userUtil.createUser(request(app), user);
     await request(app)
       .get('/api/users/me')
       .set('Accept', 'application/json')
@@ -119,7 +119,7 @@ describe('User API', () => {
       username: 'username_007',
       password: 'pass',
     };
-    await userUtil.createUser(app, user);
+    await userUtil.createUser(request(app), user);
     await request(app)
       .post('/api/users')
       .send(newUser)

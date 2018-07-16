@@ -18,7 +18,7 @@ describe('Authentication API', () => {
       username: 'username_auth_001',
       password: 'pass',
     };
-    const createdUser = await userUtil.createUser(app, user);
+    const createdUser = await userUtil.createUser(request(app), user);
     await request(app)
       .post('/auth/signin')
       .send(user)
@@ -39,7 +39,7 @@ describe('Authentication API', () => {
       username: 'username_auth_002',
       password: 'pass',
     };
-    await userUtil.createUser(app, user);
+    await userUtil.createUser(request(app), user);
     user.password = 'wrongPass';
     await request(app)
       .post('/auth/signin')
@@ -75,7 +75,7 @@ describe('Authentication API', () => {
       username: 'username_auth_004',
       password: 'pass',
     };
-    const createdUser = await userUtil.createUser(app, user);
+    const createdUser = await userUtil.createUser(request(app), user);
     await request(app)
       .get('/api/users/me')
       .set('Accept', 'application/json')
@@ -95,8 +95,8 @@ describe('Authentication API', () => {
       username: 'username_auth_005',
       password: 'pass',
     };
-    const createdUser = await userUtil.createUser(app, user);
-    await userUtil.deleteUser(app, createdUser);
+    const createdUser = await userUtil.createUser(request(app), user);
+    await userUtil.deleteUser(request(app), createdUser);
     await request(app)
       .get(`/api/users/${createdUser._id}`)
       .set('Accept', 'application/json')

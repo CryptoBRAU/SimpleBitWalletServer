@@ -4,8 +4,8 @@ const _ = require('lodash');
 const appError = require('../../utils/error');
 const { signToken } = require('../../auth/auth');
 
-const params = (req, res, next, id) => {
-  User.findById(id)
+const params = async (req, res, next, id) => {
+  await User.findById(id)
     .select('-password -__v')
     .exec()
     .then((user) => {
@@ -29,8 +29,8 @@ const me = (req, res) => {
   res.json(req.user);
 };
 
-const get = (req, res, next) => {
-  User.find({})
+const get = async (req, res, next) => {
+  await User.find({})
     .select('-password -__v')
     .exec()
     .then((users) => {
@@ -44,12 +44,13 @@ const get = (req, res, next) => {
 const getOne = (req, res, next) => {
   if (!req.user) {
     next(appError.buildError(null, 404, 'User not found!'));
+  } else {
+    res.json(req.user);
   }
-  res.json(req.user);
 };
 
-const save = (user, res, next) => {
-  user.save()
+const save = async (user, res, next) => {
+  await user.save()
     .then((savedUser) => {
       const sUser = _.pick(savedUser, ['_id', 'username']);
       const token = signToken(sUser._id);
@@ -65,19 +66,19 @@ const save = (user, res, next) => {
     });
 };
 
-const put = (req, res, next) => {
+const put = async (req, res, next) => {
   const { user } = req;
   const update = req.body;
   _.merge(user, update);
-  save(user, res, next);
+  await save(user, res, next);
 };
 
-const post = (req, res, next) => {
-  save(new User(req.body), res, next);
+const post = async (req, res, next) => {
+  await save(new User(req.body), res, next);
 };
 
-const deleteUser = (req, res, next) => {
-  req.user.remove()
+const deleteUser = async (req, res, next) => {
+  await req.user.remove()
     .then((removedUser) => {
       res.json(removedUser);
     })
