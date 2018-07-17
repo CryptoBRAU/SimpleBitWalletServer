@@ -7,7 +7,22 @@ const initConfig = () => {
   process.env.NODE_ENV = 'test';
   config.init();
   dbTest.mongoose.set('bufferCommands', false);
+  // dbTest.mongoose.set('debug', config.mongooseDebug);
   logger.info('Config files for test initialized.');
+};
+
+const initModels = async () => {
+  logger.info('Initializing models for test...');
+  const models = dbTest.mongoose.modelNames();
+  if (models) {
+    const results = [];
+    for (let i = 0; i < models.length; i += 1) {
+      const model = models[i];
+      results.push(dbTest.mongoose.models[model].ensureIndexes());
+    }
+    await Promise.all(results);
+  }
+  logger.info('Models for test initialized.');
 };
 
 const startDB = async () => {
@@ -26,6 +41,7 @@ const init = async () => {
   initConfig();
   await startDB();
   await cleanDB();
+  await initModels();
 };
 
 const close = async (done) => {

@@ -1,6 +1,4 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
-// const request = require('supertest');
-
 const createUser = (request, newUser) => request.post('/api/users')
   .send(newUser)
   .then(response => response.body);

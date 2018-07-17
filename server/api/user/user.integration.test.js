@@ -115,14 +115,10 @@ describe('User API', () => {
       username: 'username_007',
       password: 'pass',
     };
-    const newUser = {
-      username: 'username_007',
-      password: 'pass',
-    };
     await userUtil.createUser(request(app), user);
     await request(app)
       .post('/api/users')
-      .send(newUser)
+      .send(user)
       .set('Accept', 'application/json')
       .expect(403)
       .then((response) => {
